@@ -168,7 +168,7 @@ void StepperMotorMovement::Homing()
 {
   time_.RTC_.read(time_.tm_); //read time from RTC
 
-  motorMinutes_.setPinsInverted(false);
+  motorMinutes_.setPinsInverted(true);
   motorHours_.setPinsInverted(true);
 
   //Start homing procedure of stepper motor at startup

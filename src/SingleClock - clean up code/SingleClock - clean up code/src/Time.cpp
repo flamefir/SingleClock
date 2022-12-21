@@ -63,6 +63,12 @@ void Time::SetTimeInRTC()
 {
   if (SetDate(__DATE__) && SetTime(timeClient_.getHours(), timeClient_.getMinutes(), timeClient_.getSeconds())) 
   {
+    Serial.print("Hours(");
+    Serial.print(timeClient_.getHours());
+    Serial.print(") Minutes(");
+    Serial.print(timeClient_.getMinutes());
+    Serial.print(") Seconds(");
+    Serial.print(timeClient_.getSeconds());
     timeParse_ = true;
     // and configure the RTC with this info
     if (RTC_.write(tm_)) 

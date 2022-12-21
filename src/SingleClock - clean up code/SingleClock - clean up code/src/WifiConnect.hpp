@@ -3,8 +3,8 @@
 class WifiConnect
 {
 private:
-    const char* ssid_ = "Stofa24867"; 
-    const char* password_ =  "stile13fancy15";
+    const char* ssid_ = "TCHLWA2971"; 
+    const char* password_ =  "qMF5T3EMmFhX4G2vjd";
     int networkList = 0;
     int ledPin_ = 2;
 public:
