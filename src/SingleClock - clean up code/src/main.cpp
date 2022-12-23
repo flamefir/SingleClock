@@ -19,6 +19,7 @@ Define classes:
 
 #define DS1307_CTRL_ID 0x68
 #define INT_PIN 4
+
 #define ledPin 2
 
 //Wifi class object 
@@ -32,17 +33,23 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
 tmElements_t tm;
 
 //Time class
-Time timeRtcNtp(RTC, tm, timeClient);
+Time myTimer(RTC, tm, timeClient);
 
 //Helper functions
-HelperFunction helper(timeRtcNtp.RTC_, timeRtcNtp.tm_);
+HelperFunction helper(myTimer.RTC_, myTimer.tm_);
 
 //Motor class
-StepperMotorMovement motor(timeRtcNtp, helper);
+StepperMotorMovement motor(myTimer, helper);
+
+//Thread class
+TaskHandle_t task1Handle = NULL;
+
+int counter1 = 0;
+int counter = 0;
 
 // Setup ISR env
 volatile bool interrupt = false;
-int tenSecondCounter = 0;
+//volatile bool interrupt_bt1 = false;
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 ICACHE_RAM_ATTR
 #endif
@@ -51,48 +58,64 @@ void sqwHandler()
 {
   interrupt = true;
 }
+// void sqwHandler_bt1()
+// {
+//   interrupt_bt1 = true;
+// }
+
+void task1(void* parameters); 
 
 void setup() {
-
   delay(500);
   Serial.begin(115200);
-
+  motor.SetupResetPin();
   // Initialize pins
   pinMode(ledPin, OUTPUT);
-  pinMode(motor.RESET_, OUTPUT);
-  digitalWrite(motor.RESET_, LOW);
-  delay(1);  // keep reset low min 1ms
-  digitalWrite(motor.RESET_, HIGH);
-  pinMode(INT_PIN, INPUT_PULLUP);                                       // ISR
-  attachInterrupt(digitalPinToInterrupt(INT_PIN), sqwHandler, FALLING); // ISR
+
+  pinMode(INT_PIN, INPUT_PULLUP);                        
+  attachInterrupt(digitalPinToInterrupt(INT_PIN), sqwHandler, FALLING);   
+  //pinMode(BT1_PIN, INPUT);                    
+  //attachInterrupt(BT1_PIN, sqwHandler_bt1, FALLING); 
 
   wifi.BeginWiFiConnection();
 
-  timeRtcNtp.SetupNTP();
-  timeRtcNtp.SetupRTCInterrupt();
-  timeRtcNtp.SetTimeInRTC();
+  myTimer.SetupNTP();
+  myTimer.SetupRTCInterrupt();
+  myTimer.SetTimeInRTC();
 
   delay(5000);
   motor.Homing();
 }
 
 void loop() {
+  
+  // if (interrupt_bt1)
+  // {
+  //   motor.StartAnimationThread();
+
+  //   Serial.print("hello");
+  //   interrupt_bt1 = false;
+    
+  // }
+  
 
   if (interrupt)
-  {  
-    timeRtcNtp.RTC_.read(timeRtcNtp.tm_);
+  { 
+    myTimer.RTC_.read(myTimer.tm_);
+    myTimer.UpdateDST(myTimer.tm_);
 
-    if (helper.GetDigitInt(timeRtcNtp.tm_.Second, 0) == 0)
+    if (helper.GetDigitInt(myTimer.tm_.Second, 0) == 0)
     {
-      helper.PrintTimeFromRTC(timeRtcNtp.timeParse_, timeRtcNtp.RTCConfig_);
+      helper.PrintTimeFromRTC(myTimer.timeParse_, myTimer.RTCConfig_);
       motor.Step("MinuteMotor");
     }
 
-    if ((timeRtcNtp.tm_.Minute % 2) == 0 && timeRtcNtp.tm_.Second == 0) //even ten's number
+    if ((myTimer.tm_.Minute % 2) == 0 && myTimer.tm_.Second == 0)
     {
-      helper.PrintTimeFromRTC(timeRtcNtp.timeParse_, timeRtcNtp.RTCConfig_);
+      helper.PrintTimeFromRTC(myTimer.timeParse_, myTimer.RTCConfig_);
       motor.Step("HourMotor");
     }
     interrupt = false; // clear flag
   }
 }
+

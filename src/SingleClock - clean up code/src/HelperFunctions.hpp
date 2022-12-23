@@ -13,4 +13,5 @@ public:
     int GetDigitInt(int, int);
     void Print2digits(int);
     void PrintTimeFromRTC(bool parse_, bool config_);
+    void PrintDateFromRTC(bool parse_, bool config_);
 };

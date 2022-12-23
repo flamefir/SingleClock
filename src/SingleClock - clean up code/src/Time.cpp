@@ -10,9 +10,10 @@ Time::~Time()
 
 void Time::SetupNTP()
 {
-    timeClient_.begin(); 
-    timeClient_.setTimeOffset(7200);
-    timeClient_.update();
+  timeOffset_ = (DST_)? 7200 : 3600; 
+  timeClient_.begin(); 
+  timeClient_.setTimeOffset(timeOffset_); //7200 summer time // 3600 winter time
+  timeClient_.update();
 }
 
 void Time::SetupRTCInterrupt()
@@ -59,16 +60,42 @@ bool Time::SetDate(const char *str)
   return true;
 }
 
+ void Time::UpdateDST(tmElements_t tm_)
+ {
+  /*
+    EU standard for DST daylight saving time is: 
+    - One hour backwards the last sunday in October
+    - One hour forwards the last sunday in March
+  */
+  if(tm_.Month == 10 && tm_.Day >= 25 && tm_.Wday == 1 && tm_.Hour == 3)
+  {
+    SetTime(timeClient_.getHours() - 1, timeClient_.getMinutes(), timeClient_.getSeconds());
+    DST_ = false;
+    timeParse_ = true;
+    if (RTC_.write(tm_)) 
+    {
+      RTCConfig_ = true;
+    }
+    else {RTCConfig_ = false;}
+  }
+  
+  if(tm_.Month == 3 && tm_.Day >= 25 && tm_.Wday == 1 && tm_.Hour == 2)
+  {
+    SetTime(timeClient_.getHours() + 1, timeClient_.getMinutes(), timeClient_.getSeconds());
+    DST_ = true;
+    timeParse_ = true;
+    if (RTC_.write(tm_)) 
+    {
+      RTCConfig_ = true;
+    }
+    else {RTCConfig_ = false;}
+  }
+ }
+
 void Time::SetTimeInRTC()
 {
   if (SetDate(__DATE__) && SetTime(timeClient_.getHours(), timeClient_.getMinutes(), timeClient_.getSeconds())) 
   {
-    Serial.print("Hours(");
-    Serial.print(timeClient_.getHours());
-    Serial.print(") Minutes(");
-    Serial.print(timeClient_.getMinutes());
-    Serial.print(") Seconds(");
-    Serial.print(timeClient_.getSeconds());
     timeParse_ = true;
     // and configure the RTC with this info
     if (RTC_.write(tm_)) 

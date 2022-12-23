@@ -36,13 +36,19 @@ void HelperFunction::PrintTimeFromRTC(bool parse_, bool config_)
     Serial.write(':');
     Print2digits(tm_.Second);
     Serial.println("");
-    //Serial.print(", Date (D/M/Y) = ");
-    //Serial.print(tm.Day);
-    //Serial.write('/');
-    //Serial.print(tm.Month);
-    //Serial.write('/');
-    //Serial.println(tmYearToCalendar(tm.Year));
-    //Serial.print("Second digit of seconds: ");
-    //Serial.println(GetDigitInt(tm.Second, 0));
+  }
+}
+
+void HelperFunction::PrintDateFromRTC(bool parse_, bool config_)
+{
+  //Reads and displays time from RTC tm
+  if (RTC_.read(tm_) && parse_ && config_) 
+  {
+    Serial.print("Date (D/M/Y) = ");
+    Serial.print(tm_.Day);
+    Serial.write('/');
+    Serial.print(tm_.Month);
+    Serial.write('/');
+    Serial.println(tmYearToCalendar(tm_.Year));
   }
 }

@@ -24,20 +24,39 @@ private:
 
     Time time_;
     HelperFunction helper_;
-    AccelStepper motorHours_;
-    AccelStepper motorMinutes_;
 public:
     StepperMotorMovement(Time, HelperFunction);
     ~StepperMotorMovement();
-    void MoveMinuteMotorInDeg(long minuteMotorPos);
-    void MoveHourMotorInDeg(long hourMotorPos);
+    void SetupResetPin();
+
+    void StartMinuteMotorThread(long minuteMotorPos);
+    static void StartMinuteTask(void *_this);
+    void MoveMinuteMotorInDeg();
+
+    void StartHourMotorThread(long hourMotorPos);
+    static void StartHourTask(void *_this);
+    void MoveHourMotorInDeg();
+
     void MoveBothMotorsInDeg(long minuteMotorPos, long hourMotorPos);
+
     void Homing();
     long ConvMinToRotation(int);
     long ConvHourToRotation(int);
     void Step(String);
+
+    void StartAnimationThread();
+    static void StartAnimationTask(void *_this);
+    void AnimationOne();
     
+    const int RESET_ = 15;             // pin for RESET
     long minuteStepInDegrees_ = 0;
     long hourStepInDegrees_ = 0;
-    const int RESET_ = 15;            // pin for RESET
+
+    int minuteMotorPos_;
+    int hourMotorPos_;
+    AccelStepper motorHours_;
+    AccelStepper motorMinutes_;
+    TaskHandle_t handleAnimationTasks = NULL;
+    TaskHandle_t handleMinTask = NULL;
+    TaskHandle_t handleHourTask = NULL;
 };

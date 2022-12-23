@@ -11,6 +11,8 @@ class Time
 private:
     const char *monthName_[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     String weekDays[7]={};
+    long timeOffset_;
+    bool DST_ = false;
     ErriezDS1307 rtcSQW_;
 public:
     Time(DS1307RTC, tmElements_t, NTPClient);
@@ -21,7 +23,8 @@ public:
     bool SetDate(const char *str);
     void SetTimeInRTC();
     void GetTimeFromNTPServer();
-
+    void UpdateDST(tmElements_t tm_);
+    
     DS1307RTC RTC_;
     tmElements_t tm_;
     NTPClient timeClient_;

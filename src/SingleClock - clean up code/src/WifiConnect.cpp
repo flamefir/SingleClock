@@ -10,15 +10,15 @@ WifiConnect::~WifiConnect()
 
 void WifiConnect::BeginWiFiConnection()
 {
-    WiFi.begin(ssid_, password_);
-    while (WiFi.status() != WL_CONNECTED) 
-    {
-        digitalWrite(ledPin_, HIGH);
-        delay(1000);
-        digitalWrite(ledPin_, LOW);
-        Serial.println("Connecting to WiFi..");
-    }
-    Serial.println(WiFi.localIP());
+  WiFi.begin(ssid_, password_);
+  while (WiFi.status() != WL_CONNECTED) 
+  {
+      digitalWrite(ledPin_, HIGH);
+      delay(1000);
+      digitalWrite(ledPin_, LOW);
+      Serial.println("Connecting to WiFi..");
+  }
+  Serial.println(WiFi.localIP());
 }
 
 void WifiConnect::ScanForWiFiSignal()
@@ -60,6 +60,7 @@ void WifiConnect::ConnectToWiFi(const char *DesiredSSID, const char *PassPhrase)
     if(WiFi.SSID(i) == DesiredSSID)
     {
       WiFi.begin(DesiredSSID, PassPhrase);
+      WiFiConnectStatus(DesiredSSID);
     }
     if(WiFi.SSID(i) == "NETGEAR19")
     {
