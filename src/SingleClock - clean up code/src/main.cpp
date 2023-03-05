@@ -22,26 +22,26 @@ Define classes:
 
 #define ledPin 2
 
-//Wifi class object 
+// Wifi class object
 WifiConnect wifi;
 
-//NTP server request time data
+// NTP server request time data
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
 
-//Time object
+// Time object
 tmElements_t tm;
 
-//Time class
+// Time class
 Time myTimer(RTC, tm, timeClient);
 
-//Helper functions
+// Helper functions
 HelperFunction helper(myTimer.RTC_, myTimer.tm_);
 
-//Motor class
+// Motor class
 StepperMotorMovement motor(myTimer, helper);
 
-//Thread class
+// Thread class
 TaskHandle_t task1Handle = NULL;
 
 int counter1 = 0;
@@ -49,7 +49,7 @@ int counter = 0;
 
 // Setup ISR env
 volatile bool interrupt = false;
-//volatile bool interrupt_bt1 = false;
+// volatile bool interrupt_bt1 = false;
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 ICACHE_RAM_ATTR
 #endif
@@ -58,26 +58,21 @@ void sqwHandler()
 {
   interrupt = true;
 }
-// void sqwHandler_bt1()
-// {
-//   interrupt_bt1 = true;
-// }
 
-void task1(void* parameters); 
-
-void setup() {
+void setup()
+{
   delay(500);
   Serial.begin(115200);
   motor.SetupResetPin();
   // Initialize pins
   pinMode(ledPin, OUTPUT);
 
-  pinMode(INT_PIN, INPUT_PULLUP);                        
-  attachInterrupt(digitalPinToInterrupt(INT_PIN), sqwHandler, FALLING);   
-  //pinMode(BT1_PIN, INPUT);                    
-  //attachInterrupt(BT1_PIN, sqwHandler_bt1, FALLING); 
+  pinMode(INT_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(INT_PIN), sqwHandler, FALLING);
+  // pinMode(BT1_PIN, INPUT);
+  // attachInterrupt(BT1_PIN, sqwHandler_bt1, FALLING);
 
-  wifi.BeginWiFiConnection();
+  wifi.ConnectToWiFi();
 
   myTimer.SetupNTP();
   myTimer.SetupRTCInterrupt();
@@ -85,22 +80,14 @@ void setup() {
 
   delay(5000);
   motor.Homing();
+
+  wifi.DisconnectFromWiFi();
 }
 
-void loop() {
-  
-  // if (interrupt_bt1)
-  // {
-  //   motor.StartAnimationThread();
-
-  //   Serial.print("hello");
-  //   interrupt_bt1 = false;
-    
-  // }
-  
-
+void loop()
+{
   if (interrupt)
-  { 
+  {
     myTimer.RTC_.read(myTimer.tm_);
     myTimer.UpdateDST(myTimer.tm_);
 
@@ -118,4 +105,3 @@ void loop() {
     interrupt = false; // clear flag
   }
 }
-

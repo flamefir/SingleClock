@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "806840477016",
+    "project_id": "singleclock-9a1df",
+    "storage_bucket": "singleclock-9a1df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806840477016:android:b7524dd86fd2136a01312d",
+        "android_client_info": {
+          "package_name": "com.example.single_clock_proj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806840477016-acj9kvdsimfgnfbukd78ff3es7be21l6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClzPsKmQJTesAYAc5eBt8APbgSTJMB928"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806840477016-acj9kvdsimfgnfbukd78ff3es7be21l6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

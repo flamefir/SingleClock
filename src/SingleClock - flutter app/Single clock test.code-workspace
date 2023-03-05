@@ -1,0 +1,56 @@
+{
+	"folders": [
+		{
+			"name": "Single clock test",
+			"path": "../Single clock test"
+		},
+		{
+			"name": "SingleClock - switec library test",
+			"path": "../SingleClock - switec library test/SingleClock - switec library test"
+		},
+		{
+			"name": "SingleClock accelstepper test",
+			"path": "../SingleClock accelstepper test"
+		},
+		{
+			"name": "SingleClock RTC test",
+			"path": "../../../../../../OneDrive - Aarhus Universitet/Dokumenter/PlatformIO/Projects/SingleClock RTC test"
+		},
+		{
+			"name": "SingleClock - Test RTC and motor",
+			"path": "../../../../../../OneDrive - Aarhus Universitet/Dokumenter/PlatformIO/Projects/SingleClock - Test RTC and motor"
+		},
+		{
+			"name": "Find I2C adress of devices",
+			"path": "../Find I2C adress of devices"
+		},
+		{
+			"name": "RTC test setting the SQW",
+			"path": "../RTC test setting the SQW"
+		},
+		{
+			"name": "SingleClock - RTC and SQW motor interrupt test",
+			"path": "../SingleClock - RTC and SQW motor interrupt test"
+		},
+		{
+			"name": "SingleClock homing test",
+			"path": "../SingleClock homing test"
+		},
+		{
+			"name": "SingleClock - final test",
+			"path": "../SingleClock - final test"
+		},
+		{
+			"name": "SingleClock - clean up code",
+			"path": "../SingleClock - clean up code/SingleClock - clean up code"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"\"*.ino\"": "\"*.cpp\"",
+			"*.tcc": "cpp",
+			"string": "cpp"
+		},
+		"terminal.integrated.cwd": "\"circuitDiagram.executablePath\": \"C:\\\\Path\\\\To\\\\circuit-diagram-cli.exe\""
+	}
+}
