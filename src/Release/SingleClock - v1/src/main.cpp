@@ -69,8 +69,6 @@ void setup()
 
   pinMode(INT_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(INT_PIN), sqwHandler, FALLING);
-  // pinMode(BT1_PIN, INPUT);
-  // attachInterrupt(BT1_PIN, sqwHandler_bt1, FALLING);
 
   wifi.ConnectToWiFi();
 

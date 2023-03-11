@@ -16,4 +16,6 @@ public:
     void DisconnectFromWiFi();
     const char *ssid_ = "Flamefire";
     const char *password_ = "12345678";
+    const char *ssidFromBluetooth_ = "";
+    const char *passwordFromBluetooth_ = "";
 };
